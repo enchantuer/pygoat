@@ -1,0 +1,17 @@
+on:
+  push:
+    branches: [ "master" ]
+jobs:
+  build:
+    runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
+    steps:
+      - name: Import Secrets
+        id: import-secrets
+        uses: hashicorp/vault-action@v2
+        with:
+          url: https://vault.mycompany.com:8200
+          caCertificate: ${{ secrets.VAULT_CA_CERT }}
+          path: my-custom-path
+          method: userpass
+          username: ${{ secrets.VAULT_USERNAME }}
+          password: ${{ secrets.VAULT_PASSWORD }}
